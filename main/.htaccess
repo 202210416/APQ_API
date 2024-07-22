@@ -1,0 +1,19 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Allow direct access to the uploads directory
+    RewriteCond %{REQUEST_URI} ^/uploads/ [NC]
+    RewriteRule ^ - [L]
+
+    # Handle routing for non-existing files or directories
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^(.*)$ routes.php?request=$1 [L,QSA]
+</IfModule>
+
+# Additional headers for caching images
+<IfModule mod_headers.c>
+    <FilesMatch "\.(jpg|jpeg|png|gif|webp)$">
+        Header set Cache-Control "max-age=2592000, public"
+    </FilesMatch>
+</IfModule>
